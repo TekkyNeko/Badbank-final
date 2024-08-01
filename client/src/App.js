@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import NavBar from "./components/navbar";
+import { Routes, Route } from "react-router";
+import Login from "./components/login";
+import CreateAccount from "./components/createaccount"
+import Deposit from "./components/deposit";
+import Withdraw from "./components/withdraw";
+import Balance from "./components/balance";
+import AllData from "./components/alldata";
+import Home from "./components/home";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <NavBar/>
+      <Routes className="container" style={{padding: "20px"}}>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/login/" element={<Login/>} />
+        <Route path="/CreateAccount/" element={<CreateAccount/>}/>
+        <Route path="/deposit/" element={<Deposit/>}/>
+        <Route path="/withdraw/" element={<Withdraw/>}/>
+        <Route path="/balance/" element={<Balance/>}/>
+        <Route path="/alldata/" element={<AllData/>}/>
+      </Routes>
+      
     </div>
   );
 }

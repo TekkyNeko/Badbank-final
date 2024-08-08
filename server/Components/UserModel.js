@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Your password is required"],
   },
+  accounts: {
+    type: Object,
+    default: {checking: {accountType: "checking", balance:100} ,savings:{accountType:"savings", balance: 100}}
+  },
   createdAt: {
     type: Date,
     default: new Date(),

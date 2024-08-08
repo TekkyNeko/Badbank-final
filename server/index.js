@@ -15,7 +15,11 @@ mongoose
 app.listen(4000, () => {
   console.log(`Server Started! Running on port: ${PORT}`)
 });
-
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
 app.use(cookieParser());
 
 app.use(express.json());

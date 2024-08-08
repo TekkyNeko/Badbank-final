@@ -1,11 +1,61 @@
 import { useState } from "react";
 import { Card } from "./card";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 function CreateAccount(){
   const [show, setShow]         = useState(true);
   const [status, setStatus]     = useState('');
-  const [name, setName]         = useState('');
-  const [email, setEmail]       = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState({
+    email: "",
+    password:"",
+    username: ""
+  });
+  const {email, password, username} = inputValue;
+  const handleOnChange = (e) => {
+    const {name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
+  const handleError = (err) => {
+    console.log(err);
+  }
+  const handleSuccess = (msg) => {
+    console.log(msg);
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        "http://localhost:4000/signup",
+        {
+          ...inputValue,
+        },
+        { withCredentials: true }
+      );
+      const { success, message } = data;
+      if (success) {
+        handleSuccess(message);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else {
+        handleError(message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setInputValue({
+      ...inputValue,
+      email: "",
+      password: "",
+      username: "",
+    });
+  };
 
 
   function validate(field, label){
@@ -17,44 +67,29 @@ function CreateAccount(){
       return true;
   }
 
-  function handleCreate(){
-    console.log(name,email,password);
-    if (!validate(name,     'name'))     return;
-    if (!validate(email,    'email'))    return;
-    if (!validate(password, 'password')) return;
-    
-    setShow(false);
-  }    
-
-  function clearForm(){
-    setName('');
-    setEmail('');
-    setPassword('');
-    setShow(true);
-  }
-
   return (
     <Card
+      className="center"
       bgcolor="primary"
       header="Create Account"
       status={status}
       body={show ? (  
-              <>
-              Name<br/>
-              <input type="input" className="form-control" id="name" placeholder="Enter name" value={name} onChange={e => setName(e.currentTarget.value)} /><br/>
+              <form onSubmit={handleSubmit}>
+              Username<br/>
+              <input type="text" name="username" className="form-control" id="username" placeholder="Enter name" value={username} onChange={handleOnChange} /><br/>
               Email address<br/>
-              <input type="input" className="form-control" id="email" placeholder="Enter email" value={email} onChange={e => setEmail(e.currentTarget.value)}/><br/>
+              <input type="email" name="email" className="form-control" id="email" placeholder="Enter email" value={email} onChange={handleOnChange}/><br/>
               Password<br/>
-              <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={e => setPassword(e.currentTarget.value)}/><br/>
-              <button type="submit" className="btn btn-light" onClick={handleCreate}>Create Account</button>
-              </>
+              <input type="password" name="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={handleOnChange}/><br/>
+              <button type="submit" className="btn btn-light">Create Account</button>
+              </form>
             ):(
               <>
               <h5>Success</h5>
-              <button type="submit" className="btn btn-light" onClick={clearForm}>Add another account</button>
+              <button type="submit" className="btn btn-light">Add another account</button>
               </>
             )}
-    />
+    />  
   )
 }
 

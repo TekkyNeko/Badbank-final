@@ -1,5 +1,4 @@
 const User = require("../Components/UserModel");
-const userVerification = require("../Components/AuthMiddleware");
 const jwt = require("jsonwebtoken");
 module.exports.GetBalance = async (req, res, next) => {
   const token = req.cookies.token;
@@ -14,13 +13,4 @@ module.exports.GetBalance = async (req, res, next) => {
       if(user) return res.json({status: true, user: user.username, accounts: user.accounts})
     }
   })
-  /*try {
-    const { email, accounts } = req.body;
-    
-    
-    console.log(user);
-    next()
-  } catch (error) {
-    console.error(error);
-  }*/
 }

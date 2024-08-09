@@ -1,30 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { useCookies } from "react-cookie";
+import axios from "axios";
 import { Card } from "./card";
-function Withdraw(){
-  const [show, setShow]         = useState(true);
-  const [status, setStatus]     = useState('');
-  const [email, setEmail]       = useState('');
-  const [password, setPassword] = useState('');
+function Withdraw() {
+  const [show, setShow] = useState(true);
+  const [status, setStatus] = useState("");
+  const [displayedBalance, setDisplayedBalance] = useState("checking");
   const [balance, setBalance] = useState(0);
+  const [checkBalance, setCheckBalance] = useState(0);
+  const [saveBalance, setSaveBalance] = useState(0);
+  const [withdrawAmount, setWithdrawAmount] = useState(10.00);
+  const [cookies, setCookie, removeCookie] = useCookies([]);
+  const navigate = useNavigate();
+  
 
-  function validate(field, label){
-      if (!field) {
-        setStatus('Error: ' + label);
-        setTimeout(() => setStatus(''),3000);
-        return false;
+  useEffect(() => {
+    const verifyCookie = async () => {
+      if (!cookies.token) {
+        navigate("/login");
       }
-      return true;
-  }
+      const { data } = await axios.post(
+        "http://localhost:4000/getbalance",
+        {},
+        { withCredentials: true }
+      );
+      const { status, accounts } = data;
+      if (accounts != null) {
+        setCheckBalance(accounts.checking.balance);
+        setSaveBalance(accounts.savings.balance);
+        setBalance(accounts.checking.balance);
+      }
 
-  function handleWithdraw(){
-    
+      return status
+        ? console.log(status)
+        : (removeCookie("token"), navigate("/login"));
+    };
+    verifyCookie();
+  }, [cookies, navigate, removeCookie]);
+
+  async function handleWithdraw() {
+    if(!checkForNumber(withdrawAmount, "Not a Number")) return;
+    axios.post("http://localhost:4000/withdraw", {accountType: displayedBalance, withdrawAmount: withdrawAmount}, {withCredentials: true});
     setShow(false);
-  }    
-
-  function clearForm(){
-    setEmail('');
-    setPassword('');
+    
+    
+  }
+  
+  function clearForm() {
+    setWithdrawAmount(10);
     setShow(true);
+  }
+  const handleDropdown = (e) => {
+    setDisplayedBalance(e.target.value);
+    if (e.target.value === "checking") {
+      setBalance(checkBalance);
+    } else {
+      setBalance(saveBalance);
+    }
+  };
+
+  function checkForNumber(field, label) {
+    if(isNaN(Number(field))) {
+      setStatus('Error: ' + label)
+      setTimeout(() => setStatus(''), 3000);
+      return false;
+    }
+    return true;
   }
 
   return (
@@ -34,22 +76,53 @@ function Withdraw(){
       bgcolor="dark"
       header="Withdraw"
       status={status}
-      body={show ? (  
-              <>
-              Current Balance: <span style={{margin: "right"}}>${balance}</span> <br/>
-              <br/>
-              Withdraw Amount:<br/>
-              <input type="number" className="form-control" id="withdrawAmount" placeholder="20.00" value={balance} onChange={e => setBalance(e.currentTarget.value)}/><br/>
-              <button type="submit" className="btn btn-light" onClick={handleWithdraw}>Withdraw</button>
-              </>
-            ):(
-              <>
-              <h5>Success</h5>
-              <button type="submit" className="btn btn-light" onClick={clearForm}>Withdraw Again</button>
-              </>
-            )}
-    />  
-  )
+      body={
+        show ? (
+          <>
+            <select
+              style={{ textAlign: "center" }}
+              className="form-select"
+              aria-label="Checking"
+              onChange={handleDropdown}
+              value={displayedBalance}
+            >
+              <option value="checking">Checking</option>
+              <option value="savings">Savings</option>
+            </select>
+            <br />
+            Current Balance: <span style={{ margin: "right" }}>${balance}</span>
+            <br />
+            <br />
+            Withdraw Amount:
+            <br />
+            <input
+              type="number"
+              className="form-control"
+              id="withdrawAmount"
+              placeholder="20.00"
+              value={withdrawAmount}
+              onChange={(e) => setWithdrawAmount(e.currentTarget.value)}
+            />
+            <br />
+            <button
+              type="submit"
+              className="btn btn-light"
+              onClick={handleWithdraw}
+            >
+              Withdraw
+            </button>
+          </>
+        ) : (
+          <>
+            <h5>Success</h5>
+            <button type="submit" className="btn btn-light" onClick={clearForm}>
+              Withdraw Again
+            </button>
+          </>
+        )
+      }
+    />
+  );
 }
 
 export default Withdraw;

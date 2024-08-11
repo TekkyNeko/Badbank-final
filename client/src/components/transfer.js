@@ -3,17 +3,16 @@ import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { Card } from "./card";
-function Deposit() {
+function Transfer() {
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
-  const [displayedBalance, setDisplayedBalance] = useState("checking");
   const [balance, setBalance] = useState(0);
   const [checkBalance, setCheckBalance] = useState(0);
-  const [saveBalance, setSaveBalance] = useState(0);
-  const [depositAmount, setDepositAmount] = useState(10.00);
+  const [transferAmount, setTransferAmount] = useState(10.0);
+  const [transferTo, setTransferTo] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [result, setResult] = useState('');
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     const verifyCookie = async () => {
@@ -28,7 +27,6 @@ function Deposit() {
       const { status, accounts } = data;
       if (accounts != null) {
         setCheckBalance(accounts.checking.balance);
-        setSaveBalance(accounts.savings.balance);
         setBalance(accounts.checking.balance);
       }
 
@@ -39,30 +37,45 @@ function Deposit() {
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
 
-  async function handleDeposit() {
-    if(!checkForNumber(depositAmount, "Not a Number")) return;
-    axios.post("http://localhost:4000/deposit", {accountType: displayedBalance, depositAmount: depositAmount}, {withCredentials: true});
+  function validate(field, label) {
+    if (!field) {
+      setStatus("Error: " + label);
+      setTimeout(() => setStatus(""), 3000);
+      return false;
+    }
+    return true;
+  }
+
+  async function handleTransfer() {
+    if (!validate(transferTo, "Please input a username")) return;
+    if (!checkForNumber(transferAmount, "Not a Number")) return;
+    axios.post(
+      "http://localhost:4000/transfer",
+      { transferAmount: transferAmount, username: transferTo },
+      { withCredentials: true }
+    ).then(function (res) {
+      if(res.data.err != undefined)
+      {
+        setResult(res.data.err);
+      } else {
+        setResult("Money Transferred Successfully!");
+      }
+      
+    });
     setShow(false);
   }
-  
+
   function clearForm() {
-    setDepositAmount(10);
+    setTransferAmount(10);
     setShow(true);
-    window.location.reload();
+    setResult('');
+    window.location.reload()
   }
-  const handleDropdown = (e) => {
-    setDisplayedBalance(e.target.value);
-    if (e.target.value === "checking") {
-      setBalance(checkBalance);
-    } else {
-      setBalance(saveBalance);
-    }
-  };
 
   function checkForNumber(field, label) {
-    if(isNaN(Number(field))) {
-      setStatus('Error: ' + label)
-      setTimeout(() => setStatus(''), 3000);
+    if (isNaN(Number(field))) {
+      setStatus("Error: " + label);
+      setTimeout(() => setStatus(""), 3000);
       return false;
     }
     return true;
@@ -73,49 +86,45 @@ function Deposit() {
       className="center"
       txtcolor="light"
       bgcolor="dark"
-      header="Deposit"
+      header="Transfer"
       status={status}
       body={
         show ? (
           <>
-            <select
-              style={{ textAlign: "center" }}
-              className="form-select"
-              aria-label="Checking"
-              onChange={handleDropdown}
-              value={displayedBalance}
-            >
-              <option value="checking">Checking</option>
-              <option value="savings">Savings</option>
-            </select>
+            Input the username you want to transfer money to:
+            <br />
+            <br />
+            <input type="text" name="transferTo" className="form-control" id="transferTo" placeholder="Enter name" value={transferTo}
+              onChange={(e) => setTransferTo(e.currentTarget.value)}
+            />
             <br />
             Current Balance: <span style={{ margin: "right" }}>${balance}</span>
             <br />
             <br />
-            Deposit Amount:
+            Transfer Amount:
             <br />
             <input
-              type="text"
+              type="text  "
               className="form-control"
-              id="depositAmount"
+              id="transferAmount"
               placeholder="20.00"
-              value={depositAmount}
-              onChange={(e) => setDepositAmount(e.currentTarget.value)}
+              value={transferAmount}
+              onChange={(e) => setTransferAmount(e.currentTarget.value)}
             />
             <br />
             <button
               type="submit"
               className="btn btn-light"
-              onClick={handleDeposit}
+              onClick={handleTransfer}
             >
-              Deposit
+              Transfer
             </button>
           </>
         ) : (
           <>
-            <h5>Success</h5>
+            <h5>{result}</h5>
             <button type="submit" className="btn btn-light" onClick={clearForm}>
-              Deposit Again
+              Transfer Again
             </button>
           </>
         )
@@ -124,4 +133,4 @@ function Deposit() {
   );
 }
 
-export default Deposit;
+export default Transfer;

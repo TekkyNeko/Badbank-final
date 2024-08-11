@@ -17,15 +17,15 @@ module.exports.Withdraw = async (req, res, next) => {
         if (accountType === "checking") {
           if (user.accounts.checking.balance < withdraw)
             return res.json({ status: "Error: Insufficient Funds" });
-          let newBalance = user.accounts.checking.balance - withdraw;
+          let newBalance = Number(user.accounts.checking.balance) - Number(withdraw);
           user.accounts.checking.balance = newBalance;
         } else {
           if(user.accounts.savings.balance < withdraw)
           {
             return res.json({status: "Error: Insufficient Funds"});
           }
-          let newBalance = user.accounts.savings.balance - withdraw;
-          let newCheckBalance = user.accounts.checking.balance + withdraw;
+          let newBalance = Number(user.accounts.savings.balance) - Number(withdraw);
+          let newCheckBalance = Number(user.accounts.checking.balance) + Number(withdraw);
           user.accounts.savings.balance = newBalance;
           user.accounts.checking.balance = newCheckBalance;
         }

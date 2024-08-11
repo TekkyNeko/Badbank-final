@@ -5,7 +5,7 @@ import CreateAccount from "./components/createaccount";
 import Deposit from "./components/deposit";
 import Withdraw from "./components/withdraw";
 import Balance from "./components/balance";
-import AllData from "./components/alldata";
+import Transfer from "./components/transfer";
 import Home from "./components/home";
 import "./App.css";
 function App() {
@@ -20,7 +20,7 @@ function App() {
           <Route path="/deposit/" element={<Deposit />} />
           <Route path="/withdraw/" element={<Withdraw />} />
           <Route path="/balance/" element={<Balance />} />
-          <Route path="/alldata/" element={<AllData />} />
+          <Route path="/transfer/" element={<Transfer />} />
         </Routes>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { Card } from "./card";
 function Withdraw() {
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
+  const [result, setResult] = useState("");
   const [displayedBalance, setDisplayedBalance] = useState("checking");
   const [balance, setBalance] = useState(0);
   const [checkBalance, setCheckBalance] = useState(0);
@@ -13,6 +14,7 @@ function Withdraw() {
   const [withdrawAmount, setWithdrawAmount] = useState(10.00);
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const navigate = useNavigate();
+  
   
 
   useEffect(() => {
@@ -41,7 +43,11 @@ function Withdraw() {
 
   async function handleWithdraw() {
     if(!checkForNumber(withdrawAmount, "Not a Number")) return;
-    axios.post("http://localhost:4000/withdraw", {accountType: displayedBalance, withdrawAmount: withdrawAmount}, {withCredentials: true});
+    axios.post("http://localhost:4000/withdraw", {accountType: displayedBalance, withdrawAmount: withdrawAmount}, {withCredentials: true})
+    .then(function (res) {
+      setResult(res.data.status)
+    });
+    
     setShow(false);
     
     
@@ -50,6 +56,7 @@ function Withdraw() {
   function clearForm() {
     setWithdrawAmount(10);
     setShow(true);
+    window.location.reload();
   }
   const handleDropdown = (e) => {
     setDisplayedBalance(e.target.value);
@@ -96,7 +103,7 @@ function Withdraw() {
             Withdraw Amount:
             <br />
             <input
-              type="number"
+              type="text"
               className="form-control"
               id="withdrawAmount"
               placeholder="20.00"
@@ -114,7 +121,7 @@ function Withdraw() {
           </>
         ) : (
           <>
-            <h5>Success</h5>
+            <h5>{result}</h5>
             <button type="submit" className="btn btn-light" onClick={clearForm}>
               Withdraw Again
             </button>

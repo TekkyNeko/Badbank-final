@@ -23,19 +23,15 @@ function Home(){
     };
     verifyCookie()
   }, [cookies, removeCookie]);
-  const Logout  = () => {
-    removeCookie('token',{path:'/'});
-    window.location.reload();
-  }
   return (
     <Card
       txtcolor="black"
       header="BadBank Landing Module"
       title={loggedIn ? (`Welcome to the Bank ${username}!`):(`Welcome to the bank Guest!`)}
-      text="You can move around using the navigation bar."
+      text={loggedIn ? (`You can move around using the navigation bar.`):("You can log in or create an account on the nav bar.")}
       body={<><img src="/bank.png" className="img-fluid" alt="Responsive img"/>
       <br/>
-      <button className="btn btn-primary" onClick={Logout}>Logout</button>
+
       </>}
     />    
   );  

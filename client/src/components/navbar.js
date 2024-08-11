@@ -5,29 +5,38 @@ import axios from "axios";
 function NavBar() {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [loggedIn, setLoggedIn] = useState(true);
+  const [username, setUsername] = useState("");
   useEffect(() => {
     const verifyCookie = async () => {
-      if(!cookies.token) {
+      if (!cookies.token) {
         setLoggedIn(false);
       }
-      const {data} = await axios.post(
+      const { data } = await axios.post(
         "http://localhost:4000",
         {},
-        {withCredentials: true}
+        { withCredentials: true }
       );
-      const {status, user} = data;
-      return status
-       ? console.log(status) : (removeCookie("token"))
+      const { status, user } = data;
+      setUsername(user);
+      return status ? console.log(status) : removeCookie("token");
     };
-    verifyCookie()
+    verifyCookie();
   }, [cookies, removeCookie]);
   const Logout = () => {
     removeCookie("token");
-  }
+    window.location.reload();
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link className="navbar-brand" to="/">
+          <img
+            src="/bank.png"
+            alt=""
+            width="30"
+            height="24"
+            className="d-inline-block align-text-top"
+          />
           BadBank
         </Link>
         <button
@@ -41,22 +50,8 @@ function NavBar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div
-          className="collapse navbar-collapse"
-          id="navbarNav"
-          
-        >
+        <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link" to="/CreateAccount/">
-                Create Account
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/login/">
-                Login
-              </Link>
-            </li>
             {loggedIn ? (
               <>
                 <li className="nav-item">
@@ -75,21 +70,42 @@ function NavBar() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/alldata/">
-                    AllData
+                  <Link className="nav-link" to="/transfer/">
+                    Transfer
                   </Link>
-                </li>
-                <li className="nav-item">
-                  <button className="nav-link" onClick={Logout}>
-                    Logout
-                  </button>
                 </li>
               </>
             ) : (
-              <></>
+              <>
+                <li className="nav-item text-end">
+                  <Link className="nav-link" to="/CreateAccount/">
+                    Create Account
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login/">
+                    Login
+                  </Link>
+                </li>
+              </>
             )}
           </ul>
         </div>
+        {loggedIn ? (
+          <>
+          <span className="nav-item d-flex">
+          <button className="nav-link" style={{ padding: "0px 20px 0px 0px" }} onClick={Logout}>
+            Logout
+          </button>
+        </span>
+        <span
+          className="d-flex nav-item"
+          style={{ paddingRight: "20px" }}
+        >
+          {username}
+        </span>
+          </>
+        ) : (<></>)}
       </nav>
     </>
   );

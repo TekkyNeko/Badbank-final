@@ -52,6 +52,7 @@ function Login() {
         handleSuccess(message);
         setTimeout(() => {
           navigate("/");
+          window.location.reload();
         }, 1000);
       } else {
         handleError(message);

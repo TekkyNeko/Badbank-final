@@ -33,7 +33,7 @@ function CreateAccount(){
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        `${process.env.SERVER_URL}/signup`,
+        `${process.env.REACT_APP_SERVER_URL}/signup`,
         {
           ...inputValue,
         },

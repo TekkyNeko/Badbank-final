@@ -23,7 +23,7 @@ function Withdraw() {
         navigate("/login");
       }
       const { data } = await axios.post(
-        "http://localhost:4000/getbalance",
+        `${process.env.REACT_APP_SERVER_URL}/getbalance`,
         {},
         { withCredentials: true }
       );
@@ -43,7 +43,7 @@ function Withdraw() {
 
   async function handleWithdraw() {
     if(!checkForNumber(withdrawAmount, "Not a Number")) return;
-    axios.post("http://localhost:4000/withdraw", {accountType: displayedBalance, withdrawAmount: withdrawAmount}, {withCredentials: true})
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/withdraw`, {accountType: displayedBalance, withdrawAmount: withdrawAmount}, {withCredentials: true})
     .then(function (res) {
       setResult(res.data.status)
     });

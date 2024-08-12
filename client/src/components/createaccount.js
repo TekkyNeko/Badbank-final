@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Card } from "./card";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 function CreateAccount(){
-  const [show, setShow]         = useState(true);
   const [status, setStatus]     = useState('');
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
@@ -28,10 +27,13 @@ function CreateAccount(){
   }
 
   const handleSubmit = async (e) => {
+    if(!validate(inputValue.username, "Please enter a username")) return;
+    if(!validate(inputValue.email, "Please enter a valid email")) return;
+    if(!validate(inputValue.password, "Please enter a password")) return;
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/signup",
+        `${process.env.SERVER_URL}/signup`,
         {
           ...inputValue,
         },
@@ -74,7 +76,7 @@ function CreateAccount(){
       bgcolor="primary"
       header="Create Account"
       status={status}
-      body={show ? (  
+      body={ 
               <form onSubmit={handleSubmit}>
               Username<br/>
               <input type="text" name="username" className="form-control" id="username" placeholder="Enter name" value={username} onChange={handleOnChange} /><br/>
@@ -84,12 +86,7 @@ function CreateAccount(){
               <input type="password" name="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={handleOnChange}/><br/>
               <button type="submit" className="btn btn-light">Create Account</button>
               </form>
-            ):(
-              <>
-              <h5>Success</h5>
-              <button type="submit" className="btn btn-light">Add another account</button>
-              </>
-            )}
+            }
     />  
   )
 }

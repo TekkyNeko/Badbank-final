@@ -37,9 +37,11 @@ function Login() {
   };
   const handleLogin = async (e) => {
     e.preventDefault();
+    if(!validate(inputValue.email, "Please enter a valid email")) return;
+    if(!validate(inputValue.password, "Please enter a password")) return;
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/login",
+        `${process.env.REACT_APP_SERVER_URL}/login`,
         {
           ...inputValue,
         },

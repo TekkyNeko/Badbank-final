@@ -21,7 +21,7 @@ function Deposit() {
         navigate("/login");
       }
       const { data } = await axios.post(
-        "http://localhost:4000/getbalance",
+        `${process.env.REACT_APP_SERVER_URL}/getbalance`,
         {},
         { withCredentials: true }
       );
@@ -41,7 +41,7 @@ function Deposit() {
 
   async function handleDeposit() {
     if(!checkForNumber(depositAmount, "Not a Number")) return;
-    axios.post("http://localhost:4000/deposit", {accountType: displayedBalance, depositAmount: depositAmount}, {withCredentials: true});
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/deposit`, {accountType: displayedBalance, depositAmount: depositAmount}, {withCredentials: true});
     setShow(false);
   }
   

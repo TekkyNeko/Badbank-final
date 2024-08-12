@@ -12,13 +12,13 @@ function Balance() {
   const [currentBal, setCurrentBal] = useState(0);
 
   useEffect(() => {
-    console.log("Displayed Balance:" + displayedBalance);
+    console.log(process.env.REACT_APP_SERVER_URL);
     const verifyCookie = async () => {
       if (!cookies.token) {
         navigate("/login");
       }
       const { data } = await axios.post(
-        "http://localhost:4000/getbalance",
+        `${process.env.REACT_APP_SERVER_URL}/getbalance`,
         {},
         { withCredentials: true }
       );

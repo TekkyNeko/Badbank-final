@@ -10,12 +10,9 @@ module.exports.Transfer = async (req, res, next) => {
       return res.json({ accounts: null });
     } else {
       const user = await User.findById(data.id);
-      const user2 = await User.findOne({username: req.body.username}).exec();
-      console.log(req.body);
-      console.log(user2);
+      const user2 = await User.findOne({ username: req.body.username }).exec();
       if (user) {
-        
-        if (user2 != null) {
+        if (user2 != null || user.username !== user2.username) {
           let transfer = req.body.transferAmount;
           if (user.accounts.checking.balance < transfer)
             return res.json({ err: "Error: Insufficient Funds" });
@@ -29,7 +26,7 @@ module.exports.Transfer = async (req, res, next) => {
           await user.save();
           await user2.save();
         } else {
-          return res.json({err: "User does not exist"})
+          return res.json({ err: "User does not exist" });
         }
 
         console.log(user.accounts.checking.balance);

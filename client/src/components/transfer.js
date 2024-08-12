@@ -7,7 +7,6 @@ function Transfer() {
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
   const [balance, setBalance] = useState(0);
-  const [checkBalance, setCheckBalance] = useState(0);
   const [transferAmount, setTransferAmount] = useState(10.0);
   const [transferTo, setTransferTo] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies([]);
@@ -20,13 +19,12 @@ function Transfer() {
         navigate("/login");
       }
       const { data } = await axios.post(
-        "http://localhost:4000/getbalance",
+        `${process.env.REACT_APP_SERVER_URL}/getbalance`,
         {},
         { withCredentials: true }
       );
       const { status, accounts } = data;
       if (accounts != null) {
-        setCheckBalance(accounts.checking.balance);
         setBalance(accounts.checking.balance);
       }
 
@@ -50,11 +48,11 @@ function Transfer() {
     if (!validate(transferTo, "Please input a username")) return;
     if (!checkForNumber(transferAmount, "Not a Number")) return;
     axios.post(
-      "http://localhost:4000/transfer",
+      `${process.env.REACT_APP_SERVER_URL}/transfer`,
       { transferAmount: transferAmount, username: transferTo },
       { withCredentials: true }
     ).then(function (res) {
-      if(res.data.err != undefined)
+      if(res.data.err !== undefined)
       {
         setResult(res.data.err);
       } else {

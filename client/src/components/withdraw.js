@@ -23,7 +23,7 @@ function Withdraw() {
         navigate("/login");
       }
       const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/getbalance`,
+        `http://breckin-bentchfullstackbankingapplication.tekkycat.com/getbalance`,
         {},
         { withCredentials: true }
       );
@@ -43,7 +43,7 @@ function Withdraw() {
 
   async function handleWithdraw() {
     if(!checkForNumber(withdrawAmount, "Not a Number")) return;
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/withdraw`, {accountType: displayedBalance, withdrawAmount: withdrawAmount}, {withCredentials: true})
+    axios.post(`http://breckin-bentchfullstackbankingapplication.tekkycat.com/withdraw`, {accountType: displayedBalance, withdrawAmount: withdrawAmount}, {withCredentials: true})
     .then(function (res) {
       setResult(res.data.status)
     });
@@ -56,7 +56,7 @@ function Withdraw() {
   function clearForm() {
     setWithdrawAmount(10);
     setShow(true);
-    window.location.reload();
+    navigate("/");
   }
   const handleDropdown = (e) => {
     setDisplayedBalance(e.target.value);
@@ -123,7 +123,7 @@ function Withdraw() {
           <>
             <h5>{result}</h5>
             <button type="submit" className="btn btn-light" onClick={clearForm}>
-              Withdraw Again
+              Back to Home
             </button>
           </>
         )

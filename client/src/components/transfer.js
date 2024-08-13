@@ -19,7 +19,7 @@ function Transfer() {
         navigate("/login");
       }
       const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/getbalance`,
+        `http://breckin-bentchfullstackbankingapplication.tekkycat.com/getbalance`,
         {},
         { withCredentials: true }
       );
@@ -48,7 +48,7 @@ function Transfer() {
     if (!validate(transferTo, "Please input a username")) return;
     if (!checkForNumber(transferAmount, "Not a Number")) return;
     axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/transfer`,
+      `http://breckin-bentchfullstackbankingapplication.tekkycat.com/transfer`,
       { transferAmount: transferAmount, username: transferTo },
       { withCredentials: true }
     ).then(function (res) {
@@ -67,7 +67,7 @@ function Transfer() {
     setTransferAmount(10);
     setShow(true);
     setResult('');
-    window.location.reload()
+    navigate("/");
   }
 
   function checkForNumber(field, label) {
@@ -122,7 +122,7 @@ function Transfer() {
           <>
             <h5>{result}</h5>
             <button type="submit" className="btn btn-light" onClick={clearForm}>
-              Transfer Again
+              Back to Home
             </button>
           </>
         )

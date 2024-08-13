@@ -21,7 +21,7 @@ function Deposit() {
         navigate("/login");
       }
       const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/getbalance`,
+        `http://breckin-bentchfullstackbankingapplication.tekkycat.com/getbalance`,
         {},
         { withCredentials: true }
       );
@@ -41,14 +41,14 @@ function Deposit() {
 
   async function handleDeposit() {
     if(!checkForNumber(depositAmount, "Not a Number")) return;
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/deposit`, {accountType: displayedBalance, depositAmount: depositAmount}, {withCredentials: true});
+    axios.post(`http://breckin-bentchfullstackbankingapplication.tekkycat.com/deposit`, {accountType: displayedBalance, depositAmount: depositAmount}, {withCredentials: true});
     setShow(false);
   }
   
   function clearForm() {
     setDepositAmount(10);
     setShow(true);
-    window.location.reload();
+    navigate("/");
   }
   const handleDropdown = (e) => {
     setDisplayedBalance(e.target.value);

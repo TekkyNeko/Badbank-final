@@ -12,7 +12,7 @@ function Home(){
         setLoggedIn(false);
       }
       const {data} = await axios.post(
-        process.env.REACT_APP_SERVER_URL,
+        "http://breckin-bentchfullstackbankingapplication.tekkycat.com",
         {},
         {withCredentials: true}
       );

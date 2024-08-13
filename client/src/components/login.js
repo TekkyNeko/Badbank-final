@@ -41,7 +41,7 @@ function Login() {
     if(!validate(inputValue.password, "Please enter a password")) return;
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/login`,
+        `http://breckin-bentchfullstackbankingapplication.tekkycat.com/login`,
         {
           ...inputValue,
         },

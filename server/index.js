@@ -12,15 +12,17 @@ mongoose
   .then(() => console.log("MongoDB is connected Successfully"))
   .catch((err) => console.error(err));
 
-app.listen(4000, () => {
+app.listen(PORT, () => {
   console.log(`Server Started! Running on port: ${PORT}`)
 });
 app.use(cors({
-  origin: [ORIGIN_URL],
+  origin: [ORIGIN_URL, "http://breckin-bentchfullstackbankingapplication.tekkycat.com/"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
 app.use(cookieParser());
+
+app.use(express.static('public'));
 
 app.use(express.json());
 

@@ -1,0 +1,10 @@
+services:
+  app:
+    build: 
+      context: .
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tcp
+        mode: host
+    env_file: "docker.env"

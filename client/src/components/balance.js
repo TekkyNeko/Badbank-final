@@ -12,13 +12,12 @@ function Balance() {
   const [currentBal, setCurrentBal] = useState(0);
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_SERVER_URL);
     const verifyCookie = async () => {
       if (!cookies.token) {
         navigate("/login");
       }
       const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/getbalance`,
+        `http://breckin-bentchfullstackbankingapplication.tekkycat.com/getbalance`,
         {},
         { withCredentials: true }
       );

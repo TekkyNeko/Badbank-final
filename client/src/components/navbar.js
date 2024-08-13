@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 function NavBar() {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [loggedIn, setLoggedIn] = useState(true);
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     const verifyCookie = async () => {
       if (!cookies.token) {
         setLoggedIn(false);
       }
       const { data } = await axios.post(
-        "http://localhost:4000",
+        "http://breckin-bentchfullstackbankingapplication.tekkycat.com",
         {},
         { withCredentials: true }
       );
@@ -24,7 +26,8 @@ function NavBar() {
   }, [cookies, removeCookie]);
   const Logout = () => {
     removeCookie("token");
-    window.location.reload();
+    navigate("/");
+    window.location.reload()
   };
   return (
     <>

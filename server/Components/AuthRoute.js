@@ -12,5 +12,5 @@ router.post('/', userVerification);
 router.post('/getbalance', GetBalance);
 router.post('/withdraw', Withdraw);
 router.post('/deposit', Deposit);
-router.post('/transfer', Transfer);
+router.post('/transfermoney', Transfer);
 module.exports = router;

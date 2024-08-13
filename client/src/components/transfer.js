@@ -48,7 +48,7 @@ function Transfer() {
     if (!validate(transferTo, "Please input a username")) return;
     if (!checkForNumber(transferAmount, "Not a Number")) return;
     axios.post(
-      `http://breckin-bentchfullstackbankingapplication.tekkycat.com/transfer`,
+      `http://breckin-bentchfullstackbankingapplication.tekkycat.com/transfermoney`,
       { transferAmount: transferAmount, username: transferTo },
       { withCredentials: true }
     ).then(function (res) {

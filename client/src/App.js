@@ -15,10 +15,10 @@ function App() {
       <div className="container">
         <Routes className="container" style={{ padding: "20px" }}>
           <Route path="/" element={<Home />} />
-          <Route path="/login/" element={<Login />} />
+          <Route path="/loginPage/" element={<Login />} />
           <Route path="/CreateAccount/" element={<CreateAccount />} />
-          <Route path="/deposit/" element={<Deposit />} />
-          <Route path="/withdraw/" element={<Withdraw />} />
+          <Route path="/depositPage/" element={<Deposit />} />
+          <Route path="/withdrawPage/" element={<Withdraw />} />
           <Route path="/balance/" element={<Balance />} />
           <Route path="/transfer/" element={<Transfer />} />
         </Routes>

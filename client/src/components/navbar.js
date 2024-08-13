@@ -58,12 +58,12 @@ function NavBar() {
             {loggedIn ? (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/deposit/">
+                  <Link className="nav-link" to="/depositPage/">
                     Deposit
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/withdraw/">
+                  <Link className="nav-link" to="/withdrawPage/">
                     Withdraw
                   </Link>
                 </li>
@@ -86,7 +86,7 @@ function NavBar() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login/">
+                  <Link className="nav-link" to="/loginPage/">
                     Login
                   </Link>
                 </li>

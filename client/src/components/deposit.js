@@ -18,7 +18,7 @@ function Deposit() {
   useEffect(() => {
     const verifyCookie = async () => {
       if (!cookies.token) {
-        navigate("/login");
+        navigate("/loginPage");
       }
       const { data } = await axios.post(
         `http://breckin-bentchfullstackbankingapplication.tekkycat.com/getbalance`,
@@ -34,7 +34,7 @@ function Deposit() {
 
       return status
         ? console.log(status)
-        : (removeCookie("token"), navigate("/login"));
+        : (removeCookie("token"), navigate("/loginPage"));
     };
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
